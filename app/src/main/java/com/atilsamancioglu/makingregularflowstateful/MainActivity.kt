@@ -9,6 +9,7 @@ import androidx.compose.material.Surface
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.runtime.getValue
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -29,7 +30,11 @@ class MainActivity : ComponentActivity() {
                     NavHost(navController = navController, startDestination = "firstScreen"){
                         composable(route = "firstScreen") {
                             val viewModel = viewModel<FirstScreenVM>()
-                            val time by viewModel.counter.collectAsState()
+                            //val time by viewModel.counter.collectAsState()
+                            //collectAsState works when we convert a regular flow into a stateful one
+                            //however it does not have any info on lifecycle so it will continue when you minimize the app
+                            val time by viewModel.counter.collectAsStateWithLifecycle()
+
                             FirstScreen(
                                 time = time,
                             onButtonClicked = {
